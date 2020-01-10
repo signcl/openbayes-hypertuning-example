@@ -1,0 +1,24 @@
+data_binding: 
+- data: openbayes/mnist/1
+  path: /input0
+resource: t4
+env: tensorflow-1.14
+command: "python main.py --input=/input0"
+hyper_tuning:
+  max_job_count: 10
+  hyperparameter_metric: precision
+  goal: MAXIMIZE
+  algorithm: Grid
+  parameter_specs:
+  - name: filters
+    type: DISCRETE
+    discrete_values: [2, 4, 8, 16, 32, 64]
+  - name: dropout
+    type: DISCRETE
+    discrete_values: [0.01, 0.1, 0.3, 0.5]
+  - name: opt
+    type: CATEGORICAL
+    categorical_values: ["sgd", "adam", "adadelta"]
+  - name: nn
+    type: DISCRETE
+    discrete_values: [2, 4, 8, 16, 32, 64, 128]
