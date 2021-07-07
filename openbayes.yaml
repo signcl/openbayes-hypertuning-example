@@ -2,7 +2,7 @@ data_binding:
 - data: openbayes/mnist/1
   path: /input0
 resource: t4
-env: tensorflow-1.14
+env: tensorflow-1.15
 command: "python main.py --input=/input0"
 hyper_tuning:
   max_job_count: 10
