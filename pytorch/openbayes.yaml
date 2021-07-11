@@ -1,0 +1,21 @@
+data_binding: 
+- data: openbayes/mnist/1
+  path: /input0
+resource: t4
+env: pytorch-1.8.1
+command: "python main.py --input=/input0"
+hyper_tuning:
+  max_job_count: 10
+  hyperparameter_metric: precision
+  goal: MAXIMIZE
+  algorithm: Grid
+  parameter_specs:
+  - name: filters
+    type: DISCRETE
+    discrete_values: [2, 4, 8, 16, 32, 64]
+  - name: opt
+    type: CATEGORICAL
+    categorical_values: ["SGD", "Adam", "Adadelta"]
+  - name: nn
+    type: DISCRETE
+    discrete_values: [2, 4, 8, 16, 32, 64, 128]
