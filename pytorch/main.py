@@ -76,7 +76,9 @@ if args.opt == 'Adam':
 elif args.opt == 'SGD':
     optimizer = torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.5)
 elif args.opt == 'Adadelta':
-    optimizer = torch.optim.Adadelta(model.parameters(), lr=0.01, lambd=0.0001, alpha=0.75)
+    optimizer = torch.optim.Adadelta(model.parameters(), lr=0.01, rho=0.9, eps=1e-06, weight_decay=0)
+
+    
     
 loss_func = torch.nn.CrossEntropyLoss()
 
