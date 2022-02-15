@@ -1,12 +1,13 @@
 data_binding: 
-- data: openbayes/MNIST/2
+- data: openbayes/eBIQp4yPMtU/2 # MNIST 数据集 https://openbayes.com/console/openbayes/datasets/eBIQp4yPMtU/2
   path: /input0
 resource: vgpu
-env: pytorch-1.8.1
+env: pytorch-1.8
 command: "python main.py --input=/input0"
 hyper_tuning:
   max_job_count: 5
   hyperparameter_metric: acc
+  side_metrics: ["loss"]
   goal: MAXIMIZE
   algorithm: Grid
   parameter_specs:
