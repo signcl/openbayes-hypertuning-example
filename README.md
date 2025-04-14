@@ -1,6 +1,8 @@
 # openbayes 自动调参样例
 
-```
+推荐使用 PyTorch 版本的示例代码（位于 `/pytorch` 目录下）。TensorFlow 版本已不推荐使用。
+
+```text
 # 1. init gear
 bayes gear init <container-id>
 
