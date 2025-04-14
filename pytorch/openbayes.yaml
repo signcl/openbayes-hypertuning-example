@@ -1,22 +1,35 @@
 data_binding: 
 - data: openbayes/eBIQp4yPMtU/2 # MNIST 数据集 https://openbayes.com/console/openbayes/datasets/eBIQp4yPMtU/2
   path: /input0
-resource: vgpu
-env: pytorch-1.8
+resource: rtx-4090
+env: pytorch-2.6-2204
 command: "python main.py --input=/input0"
 hyper_tuning:
+  # 一次自动调参的尝试次数，最多支持 100 次
   max_job_count: 5
+  # 并行执行的任务个数，受限于用户的单个资源类型的最大并行个数
+  parallel_count: 1
+  # 自动调参的关键指标，用于评估模型性能
   hyperparameter_metric: acc
+  # 其他参考指标，不影响自动调参过程，仅用于结果展示
   side_metrics: ["loss"]
+  # 最优解的方向：MAXIMIZE (最大化) 或 MINIMIZE (最小化)
   goal: MAXIMIZE
+  # 采用的调参算法：
+  # - Grid: 对于 DISCRETE 和 CATEGORICAL 类型参数进行网格搜索
+  # - Random: 在参数范围内随机选择
+  # - Bayesian: 基于历史结果优化参数选择
   algorithm: Grid
   parameter_specs:
+  # filters参数：离散值选择
   - name: filters
     type: DISCRETE
     discrete_values: [2, 4, 8, 16, 32, 64]
+  # opt参数：分类型选择，用于选择优化器
   - name: opt
     type: CATEGORICAL
     categorical_values: ["SGD", "Adam", "Adadelta"]
+  # nn参数：离散值选择，可能用于神经网络层数或节点数
   - name: nn
     type: DISCRETE
     discrete_values: [2, 4, 8, 16, 32, 64, 128]

@@ -2,20 +2,26 @@ import torch
 import torchvision
 from torch.autograd import Variable
 import torch.utils.data.dataloader as Data
+# 导入 OpenBayes 的工具包，用于记录训练指标
 import openbayestool
 import argparse
 
+# 设置命令行参数解析器，用于接收自动调参的参数
 parser = argparse.ArgumentParser(description="hypertuning")
+# input: 数据集输入路径
 parser.add_argument("--input", help="input")
+# filters: 卷积层的滤波器数量
 parser.add_argument("--filters", help="filters")
+# nn: 全连接层的神经元数量
 parser.add_argument("--nn", help="nn")
+# opt: 优化器选择 (SGD/Adam/Adadelta)
 parser.add_argument("--opt", help="opt")
 args = parser.parse_args()
 print(args.filters, args.nn, args.opt)
 
-dense_num = int(float(args.nn))
-# number of convolutional filters to use
-nb_filters = int(float(args.filters))
+# 将命令行参数转换为模型参数
+dense_num = int(float(args.nn))  # 全连接层神经元数量
+nb_filters = int(float(args.filters))  # 初始卷积层滤波器数量
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -74,6 +80,7 @@ model = Net()
 model.to(device)
 print(model)
 
+# 根据命令行参数选择优化器
 if args.opt == "Adam":
     optimizer = torch.optim.Adam(model.parameters(), lr=0.01)
 elif args.opt == "SGD":
@@ -131,5 +138,7 @@ for epoch in range(10):
             eval_loss / (len(test_data)), eval_acc / (len(test_data))
         )
     )
-    openbayestool.log_metric("loss", eval_loss / (len(test_data)))
-    openbayestool.log_metric("acc", eval_acc / (len(test_data)))
+    # 使用 OpenBayes 工具记录每轮评估的损失值和准确率
+    # 这些指标将被用于自动调参过程
+    openbayestool.log_metric("loss", eval_loss / (len(test_data)))  # 记录损失值作为参考指标
+    openbayestool.log_metric("acc", eval_acc / (len(test_data)))    # 记录准确率作为关键指标
