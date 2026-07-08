@@ -1,9 +1,12 @@
-data_binding: 
+data_bindings:
 - data: openbayes/eBIQp4yPMtU/2 # MNIST 数据集 https://openbayes.com/console/openbayes/datasets/eBIQp4yPMtU/2
   path: /input0
+  type: ro
 resource: vgpu
 env: tensorflow-1.15
 command: "python main.py --input=/input0"
+node: 1
+parameters: {}
 hyper_tuning:
   max_job_count: 5
   hyperparameter_metric: precision
