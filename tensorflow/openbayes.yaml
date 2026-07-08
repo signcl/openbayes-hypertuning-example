@@ -8,6 +8,8 @@ command: "python main.py --input=/input0"
 node: 1
 parameters: {}
 hyper_tuning:
+  parallel_count: 1
+  side_metrics: []
   max_job_count: 5
   hyperparameter_metric: precision
   goal: MAXIMIZE
